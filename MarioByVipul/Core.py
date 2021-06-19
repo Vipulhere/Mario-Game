@@ -27,8 +27,12 @@ class Core(object):
         self.clock = pg.time.Clock()
         
         # Joystick init
-        self.js = pg.joystick.Joystick(0)
-        self.js.init()
+        try:
+            self.js = pg.joystick.Joystick(0)
+            self.js.init()
+        except pg.error:
+            print("No Joystic found")
+        
         
         
         self.oWorld = Map('1-1')
