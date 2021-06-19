@@ -26,9 +26,13 @@ class Core(object):
         self.screen = pg.display.set_mode((WINDOW_W, WINDOW_H))
         self.clock = pg.time.Clock()
         
-        # Joystick init
-        self.js = pg.joystick.Joystick(0)
-        self.js.init()
+        # Joystick
+        try: # if joystick is connected call init
+            self.js = pg.joystick.Joystick(0)
+            self.js.init()
+        except pg.error:
+            print("No Joystick found")
+        
         
         
         self.oWorld = Map('1-1')
