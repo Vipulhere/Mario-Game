@@ -19,12 +19,18 @@ class Core(object):
         environ['SDL_VIDEO_CENTERED'] = '1'
         pg.mixer.pre_init(44100, -16, 2, 1024)
         pg.init()
+        pg.joystick.init()
         pg.display.set_caption('Mario by MasterVipul')
         pg.display.set_mode((WINDOW_W, WINDOW_H))
 
         self.screen = pg.display.set_mode((WINDOW_W, WINDOW_H))
         self.clock = pg.time.Clock()
-
+        
+        # Joystick init
+        self.js = pg.joystick.Joystick(0)
+        self.js.init()
+        
+        
         self.oWorld = Map('1-1')
         self.oSound = Sound()
         self.oMM = MenuManager(self)
@@ -54,7 +60,41 @@ class Core(object):
 
             if e.type == pg.QUIT:
                 self.run = False
+            
+            if e.type == pg.JOYHATMOTION:
+                
+                hat = self.js.get_hat(0)
+                print(hat[1])
+                if hat[0] == 1:
+                    self.keyR = True
+                elif hat[0] == -1:
+                    self.keyL = True
+                elif hat[0] == 0:
+                    self.keyR = False
+                    self.keyL = False
 
+                if hat[1] == 1:
+                    self.keyU = True
+                elif hat[1] == -1:
+                    self.keyD = True
+                elif hat[1] == 0:
+                    self.keyU = False
+                    self.keyD = False                
+            
+            if e.type == pg.JOYBUTTONDOWN:
+                jump = self.js.get_button(0)
+                runNshoot = self.js.get_button(2)
+                
+                if(jump): self.keyU = True
+                if(runNshoot): self.keyShift = True
+            
+            elif e.type == pg.JOYBUTTONUP:
+                jump = self.js.get_button(0)
+                runNshoot = self.js.get_button(2)
+                
+                if jump == 0: self.keyU = False
+                if runNshoot == 0: self.keyShift = False
+                
             elif e.type == KEYDOWN:
                 if e.key == K_RIGHT:
                     self.keyR = True
@@ -63,6 +103,7 @@ class Core(object):
                 elif e.key == K_DOWN:
                     self.keyD = True
                 elif e.key == K_UP:
+                    print(self.keyU)
                     self.keyU = True
                 elif e.key == K_LSHIFT:
                     self.keyShift = True
@@ -83,7 +124,11 @@ class Core(object):
         for e in pg.event.get():
             if e.type == pg.QUIT:
                 self.run = False
-
+            
+            elif e.type == pg.JOYBUTTONDOWN:
+                start = self.js.get_button(7)
+                if(start): self.get_mm().start_loading()
+            
             elif e.type == KEYDOWN:
                 if e.key == K_RETURN:
                     self.get_mm().start_loading()
