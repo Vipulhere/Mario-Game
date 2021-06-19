@@ -32,7 +32,7 @@ class Player(object):
         
         self.pos_x = x_pos
 
-        self.image = pg.image.load('images/mario/mario.png').convert_alpha()
+        self.image = pg.image.load('./images/Mario/mario.png').convert_alpha()
         self.sprites = []
         self.load_sprites()
 
