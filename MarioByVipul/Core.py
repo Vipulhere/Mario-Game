@@ -73,12 +73,10 @@ class Core(object):
                     self.keyR = False
                     self.keyL = False
 
-                if hat[1] == 1:
-                    self.keyU = True
-                elif hat[1] == -1:
+               
+                if hat[1] == -1:
                     self.keyD = True
                 elif hat[1] == 0:
-                    self.keyU = False
                     self.keyD = False                
             
             if e.type == pg.JOYBUTTONDOWN:
